@@ -3,7 +3,7 @@
 
 # Floatchat Prototype
 
-**Live Demo:** [https://floatchat-prototype-dddm.vercel.app/](https://floatchat-prototype-dddm.vercel.app/)
+**Live Demo:** <a href="https://floatchat-prototype-dddm.vercel.app/" target="_blank" rel="noopener noreferrer">https://floatchat-prototype-dddm.vercel.app/</a>
 
 > **Governance**: Community-driven, open-source, MIT licensed  
 > **Documentation**: [CONTRIBUTING.md](CONTRIBUTING.md) | [SECURITY.md](SECURITY.md) | [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)
