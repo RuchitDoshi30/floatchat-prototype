@@ -1,19 +1,17 @@
 # Security Policy
 
 ## Supported Versions
-- Only the latest main branch is supported.
+We release security updates for the latest major version. Please update to the latest version for security patches.
 
 ## Reporting a Vulnerability
-- Please open an issue or contact the maintainer via GitHub Issues.
-- For sensitive disclosures, email the maintainer directly (see GitHub profile).
+If you discover a security vulnerability, please report it by emailing [maintainer email]. Do **not** create a public GitHub issue for security matters.
 
-## Data Security
-- This project uses only mock/demo data. No real user or sensitive data is processed or stored.
-- No authentication or external data sources are used in the demo.
+- Provide a detailed description of the vulnerability.
+- Include steps to reproduce if possible.
+- We will respond as quickly as possible and keep you informed of the progress.
 
-## Future Security Considerations
-- If real data or user authentication is added, a full security review and update to this policy will be required.
-- All dependencies should be kept up to date to avoid known vulnerabilities.
+## Disclosure Policy
+We will coordinate with you to release a fix and disclose the vulnerability responsibly.
 
----
-*For demo and research use only. No sensitive data is handled by this prototype.*
+## Credits
+Thank you for helping keep Floatchat and the community secure!

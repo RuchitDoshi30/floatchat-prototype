@@ -1,68 +1,68 @@
 
+---
+# Floatchat Prototype
 
-  # Floatchat Prototype
+> **Governance**: Community-driven, open-source, MIT licensed  
+> **Documentation**: [CONTRIBUTING.md](CONTRIBUTING.md) | [SECURITY.md](SECURITY.md) | [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)
 
-  **AI-powered ARGO Ocean Data Explorer**
+---
 
-  ---
+## Description
+Floatchat is a modern, interactive ocean data exploration dashboard. Built with React, Vite, and CesiumJS, it enables users to analyze, visualize, and interact with global ARGO float data, providing advanced filtering, real-time updates, and AI-powered insights.
 
-  ## Overview
-  Floatchat is a modern, interactive dashboard for exploring ARGO ocean float data. It features:
-  - AI-powered chat assistant for natural language queries
-  - Interactive map with float locations, trajectories, and tooltips
-  - Animated profile plots (depth vs temperature, salinity, etc.)
-  - Data table with export options (CSV, NetCDF, ASCII)
-  - Responsive design for desktop, tablet, and mobile
-  - Simulated RAG (Retrieval-Augmented Generation) and AI outputs for demo
+## Getting Started
 
-  ## Quick Start
-  1. **Clone the repository:**
-    ```sh
-    git clone https://github.com/RuchitDoshi30/floatchat-prototype.git
-    cd floatchat-prototype
-    ```
-  2. **Install dependencies:**
-    ```sh
-    npm install
-    ```
-  3. **Run the app locally:**
-    ```sh
-    npm run dev
-    ```
-  4. **Open in your browser:**
-    Visit [http://localhost:5173](http://localhost:5173)
+### Prerequisites
+- Node.js (v18+ recommended)
+- npm (v9+ recommended)
 
-  ## Features
-  - **Chat Panel:** Ask questions about ARGO data, get AI-powered summaries, and follow up with suggested queries.
-  - **Map View:** Visualize float locations, click for details, toggle 2D/3D, and see live data indicators.
-  - **Profile Plots:** Compare float profiles, animate parameter changes, and explore trends.
-  - **Data Table:** Search, sort, paginate, and export float data in multiple formats.
-  - **Fully Responsive:** Works seamlessly on all screen sizes.
+### Installation
+```sh
+npm install
+```
 
-  ## Data & Privacy
-  - **Data:** Uses mock/demo ARGO float data for demonstration. No real-time or sensitive data is included.
-  - **Privacy:** No user data is collected or stored.
+### Development
+```sh
+npm run dev
+```
 
-  ## License
-  This project is licensed under the MIT License. See [LICENSE](./LICENSE).
+### Build
+```sh
+npm run build
+```
 
-  ## GDRM Structure
-  This repository follows Good Data Release Management (GDRM) principles:
-  - **Data Source:** Only mock/demo data included
-  - **Licensing:** MIT for code, demo-only for data
-  - **Release Notes:** See below
-  - **Security:** See [SECURITY.md](./SECURITY.md)
-  - **Contributing:** See [CONTRIBUTING.md](./CONTRIBUTING.md)
-  - **Code of Conduct:** See [CODE_OF_CONDUCT.md](./CODE_OF_CONDUCT.md)
+### Preview
+```sh
+npm run preview
+```
 
-  ## Release Notes
-  - Initial public release for demo and research
-  - All features are simulated for demonstration; no real ARGO backend
-  - Responsive UI, interactive dashboard, and AI-powered outputs
+## Features
+- 🌊 Global ARGO float data explorer
+- 📊 Interactive dashboards and data tables
+- 🗺️ 2D/3D map visualization (CesiumJS integration)
+- 🔍 Advanced filtering and real-time controls
+- 🤖 AI-powered chat assistant for ocean data
+- 🧩 Modular, accessible UI components
 
-  ## Contact
-  - Maintainer: Ruchit Doshi
-  - Issues: Use the GitHub Issues tab
+## Directory Structure
+- `src/` — Main source code
+  - `components/` — UI and feature components
+  - `styles/` — Global and component styles
+  - `App.tsx` — Main application entry
+  - `DashboardMapView.tsx` — Map visualization (2D/3D)
+- `public/` — Static assets
 
-  ---
-  *For demo, research, and educational use only. Please cite the Floatchat project and ARGO program if using for research.*
+## Contributing
+See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+
+## Security
+See [SECURITY.md](SECURITY.md) for reporting vulnerabilities.
+
+## Code of Conduct
+See [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) for community standards.
+
+## License
+[MIT](LICENSE)
+
+---
+© 2025 RuchitDoshi30 and contributors. Floatchat is an open-source project licensed under MIT.
