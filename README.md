@@ -1,6 +1,9 @@
 
 ---
+
 # Floatchat Prototype
+
+**Live Demo:** [https://floatchat-prototype-dddm.vercel.app/](https://floatchat-prototype-dddm.vercel.app/)
 
 > **Governance**: Community-driven, open-source, MIT licensed  
 > **Documentation**: [CONTRIBUTING.md](CONTRIBUTING.md) | [SECURITY.md](SECURITY.md) | [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)
