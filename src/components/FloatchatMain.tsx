@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
@@ -12,13 +12,10 @@ import {
   Waves, Activity, Thermometer, Droplets, BarChart3, 
   ChevronDown, ChevronUp, Filter, RefreshCw, Download,
   Layers, ArrowLeftRight, LineChart, Settings, Eye,
-  MapPin, Globe, MessageCircle, TrendingUp, Database,
-  PanelRightOpen, PanelRightClose
+  MapPin, Globe, MessageCircle, TrendingUp, Database
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { useFilters } from "./FilterContext";
-import { DedicatedChatPanel } from "./DedicatedChatPanel";
-import { SidebarProvider, Sidebar, SidebarContent, SidebarHeader, SidebarTrigger, SidebarInset, useSidebar } from "@/components/ui/sidebar";
 
 // Mock ocean data for Floatchat
 const mockFloatData = [
@@ -96,21 +93,6 @@ export function FloatchatMain() {
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(true);
   const [viewMode, setViewMode] = useState<"overview" | "analysis" | "explore">("overview");
   const [selectedRegion, setSelectedRegion] = useState("all");
-  const [showChatPanel, setShowChatPanel] = useState(false);
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 768);
-      if (window.innerWidth < 768) {
-        setShowChatPanel(false);
-      }
-    };
-
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
 
   const toggleFloat = (floatId: string) => {
     setSelectedFloats(prev => 
@@ -281,14 +263,15 @@ export function FloatchatMain() {
                     </div>
                     <div className="flex items-center gap-2">
                       <Activity className="w-3 h-3" />
-                      {float.profileCount} profiles
+                      {float.profileCount} profiles collected
                     </div>
                     <div className="flex items-center gap-2">
                       <Thermometer className="w-3 h-3" />
                       Last profile: {new Date(float.lastProfile).toLocaleDateString()}
                     </div>
-                    <div className="text-xs text-slate-500">
-                      Max depth: {Math.max(...float.depths)}m
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-medium">Quality: {float.quality}</span>
+                      <span className="text-xs">Max depth: {Math.max(...float.depths)}m</span>
                     </div>
                   </div>
                 </motion.div>
@@ -301,148 +284,9 @@ export function FloatchatMain() {
   );
 
   return (
-    <SidebarProvider>
-      <div className="h-full flex">
-        {/* Collapsible Sidebar */}
-        <Sidebar className="border-r border-slate-200 bg-gradient-to-b from-slate-50 to-cyan-50">
-          <SidebarHeader className="p-4">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-xl">
-                <Waves className="w-5 h-5 text-white" />
-              </div>
-              <div className="group-data-[collapsible=icon]:hidden">
-                <div className="bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent font-semibold">
-                  Floatchat
-                </div>
-                <div className="text-xs text-slate-600">Ocean Explorer</div>
-              </div>
-            </div>
-          </SidebarHeader>
-          
-          <SidebarContent className="p-4 space-y-4">
-            {/* Quick Stats */}
-            <div className="space-y-3">
-              <div className="group-data-[collapsible=icon]:hidden">
-                <h3 className="text-sm font-medium text-slate-700 mb-2">Quick Stats</h3>
-              </div>
-              
-              <div className="space-y-2">
-                <div className="flex items-center gap-3 p-2 rounded-lg bg-white/60 backdrop-blur-sm">
-                  <div className="p-1.5 bg-blue-100 rounded-lg">
-                    <Waves className="w-4 h-4 text-blue-600" />
-                  </div>
-                  <div className="group-data-[collapsible=icon]:hidden">
-                    <div className="text-sm font-medium">{globalStats.activeFloats.toLocaleString()}</div>
-                    <div className="text-xs text-slate-600">Active Floats</div>
-                  </div>
-                </div>
-                
-                <div className="flex items-center gap-3 p-2 rounded-lg bg-white/60 backdrop-blur-sm">
-                  <div className="p-1.5 bg-emerald-100 rounded-lg">
-                    <Database className="w-4 h-4 text-emerald-600" />
-                  </div>
-                  <div className="group-data-[collapsible=icon]:hidden">
-                    <div className="text-sm font-medium">{(globalStats.totalProfiles / 1000000).toFixed(1)}M</div>
-                    <div className="text-xs text-slate-600">Profiles</div>
-                  </div>
-                </div>
-                
-                <div className="flex items-center gap-3 p-2 rounded-lg bg-white/60 backdrop-blur-sm">
-                  <div className="p-1.5 bg-purple-100 rounded-lg">
-                    <BarChart3 className="w-4 h-4 text-purple-600" />
-                  </div>
-                  <div className="group-data-[collapsible=icon]:hidden">
-                    <div className="text-sm font-medium">{globalStats.dataQuality}%</div>
-                    <div className="text-xs text-slate-600">Quality</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* View Mode Selection */}
-            <div className="space-y-3">
-              <div className="group-data-[collapsible=icon]:hidden">
-                <h3 className="text-sm font-medium text-slate-700 mb-2">Exploration Mode</h3>
-              </div>
-              
-              <div className="space-y-1">
-                <Button
-                  variant={viewMode === "overview" ? "default" : "ghost"}
-                  size="sm"
-                  onClick={() => setViewMode("overview")}
-                  className={`w-full justify-start gap-2 ${viewMode === "overview" ? "bg-gradient-to-r from-blue-500 to-cyan-500 text-white" : ""}`}
-                >
-                  <Globe className="w-4 h-4" />
-                  <span className="group-data-[collapsible=icon]:hidden">Global Overview</span>
-                </Button>
-                
-                <Button
-                  variant={viewMode === "analysis" ? "default" : "ghost"}
-                  size="sm"
-                  onClick={() => setViewMode("analysis")}
-                  className={`w-full justify-start gap-2 ${viewMode === "analysis" ? "bg-gradient-to-r from-blue-500 to-cyan-500 text-white" : ""}`}
-                >
-                  <TrendingUp className="w-4 h-4" />
-                  <span className="group-data-[collapsible=icon]:hidden">Deep Analysis</span>
-                </Button>
-                
-                <Button
-                  variant={viewMode === "explore" ? "default" : "ghost"}
-                  size="sm"
-                  onClick={() => setViewMode("explore")}
-                  className={`w-full justify-start gap-2 ${viewMode === "explore" ? "bg-gradient-to-r from-blue-500 to-cyan-500 text-white" : ""}`}
-                >
-                  <Layers className="w-4 h-4" />
-                  <span className="group-data-[collapsible=icon]:hidden">Data Explorer</span>
-                </Button>
-              </div>
-            </div>
-
-            {/* Selected Floats Counter */}
-            <div className="space-y-3">
-              <div className="group-data-[collapsible=icon]:hidden">
-                <h3 className="text-sm font-medium text-slate-700 mb-2">Selection</h3>
-              </div>
-              
-              <div className="flex items-center gap-3 p-2 rounded-lg bg-gradient-to-r from-blue-100 to-cyan-100">
-                <div className="p-1.5 bg-blue-500 rounded-lg">
-                  <span className="text-white text-xs font-bold">{selectedFloats.length}</span>
-                </div>
-                <div className="group-data-[collapsible=icon]:hidden">
-                  <div className="text-sm font-medium">Floats Selected</div>
-                  <div className="text-xs text-slate-600">Ready for analysis</div>
-                </div>
-              </div>
-            </div>
-          </SidebarContent>
-        </Sidebar>
-
-        {/* Main Content Area */}
-        <SidebarInset className="flex-1">
-          <div className="flex flex-col h-full">
-            {/* Header */}
-            <div className="flex items-center justify-between p-4 bg-white/80 backdrop-blur-sm border-b">
-              <div className="flex items-center gap-3">
-                <SidebarTrigger className="md:hidden" />
-                <h1 className="text-xl font-semibold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
-                  Floatchat Ocean Data Explorer
-                </h1>
-              </div>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setShowChatPanel(!showChatPanel)}
-                className="flex items-center gap-2"
-              >
-                {showChatPanel ? <PanelRightClose className="w-4 h-4" /> : <PanelRightOpen className="w-4 h-4" />}
-                <span className="hidden sm:inline">{showChatPanel ? 'Hide Chat' : 'Show Chat'}</span>
-              </Button>
-            </div>
-
-            {/* Scrollable Content */}
-            <ScrollArea className="flex-1">
-              <div className={`transition-all duration-300 ${showChatPanel && !isMobile ? 'mr-96' : ''}`}>
-                <div className="p-4 md:p-6 space-y-6">
+    <div className="h-full flex flex-col">
+      <ScrollArea className="flex-1">
+        <div className="p-6 space-y-6">
           {/* Advanced Controls */}
           <Collapsible open={showAdvancedFilters} onOpenChange={setShowAdvancedFilters}>
             <Card className="shadow-lg border-0 bg-white/60 backdrop-blur-sm">
@@ -1188,42 +1032,8 @@ export function FloatchatMain() {
               )}
             </motion.div>
           </AnimatePresence>
-                </div>
-              </div>
-            </ScrollArea>
-          </div>
-        </SidebarInset>
-
-      {/* Chat Panel */}
-      <AnimatePresence>
-        {showChatPanel && (
-          <motion.div
-            initial={{ x: 400, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            exit={{ x: 400, opacity: 0 }}
-            transition={{ duration: 0.3, ease: "easeInOut" }}
-            className={`${
-              isMobile 
-                ? 'fixed inset-0 z-50 bg-white' 
-                : 'fixed right-0 top-0 bottom-0 w-96 bg-white/95 backdrop-blur-sm border-l shadow-2xl'
-            }`}
-          >
-            {isMobile && (
-              <div className="flex items-center justify-between p-4 border-b bg-white/80 backdrop-blur-sm">
-                <h2 className="text-lg font-semibold">AI Assistant</h2>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => setShowChatPanel(false)}
-                >
-                  <PanelRightClose className="w-4 h-4" />
-                </Button>
-              </div>
-            )}
-            <DedicatedChatPanel />
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </SidebarProvider>
+        </div>
+      </ScrollArea>
+    </div>
   );
 }

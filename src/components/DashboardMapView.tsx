@@ -157,7 +157,7 @@ export function DashboardMapView() {
                         <Switch 
                           id="trajectories"
                           checked={filters.floatOptions.trajectory}
-                          onCheckedChange={(checked) => 
+                          onCheckedChange={(checked: any) => 
                             updateFilters({
                               floatOptions: { ...filters.floatOptions, trajectory: checked }
                             })
@@ -172,7 +172,7 @@ export function DashboardMapView() {
                         <Switch 
                           id="bgc-only"
                           checked={filters.floatOptions.bgcOnly}
-                          onCheckedChange={(checked) => 
+                          onCheckedChange={(checked: any) => 
                             updateFilters({
                               floatOptions: { ...filters.floatOptions, bgcOnly: checked }
                             })
@@ -184,7 +184,7 @@ export function DashboardMapView() {
                         <Switch 
                           id="3d-mode"
                           checked={filters.mapMode === "3d"}
-                          onCheckedChange={(checked) => 
+                          onCheckedChange={(checked: any) => 
                             updateFilters({ mapMode: checked ? "3d" : "2d" })
                           }
                         />
@@ -197,7 +197,7 @@ export function DashboardMapView() {
                         <Switch 
                           id="qc-filter"
                           checked={filters.floatOptions.qcFilter}
-                          onCheckedChange={(checked) => 
+                          onCheckedChange={(checked: any) => 
                             updateFilters({
                               floatOptions: { ...filters.floatOptions, qcFilter: checked }
                             })
@@ -217,7 +217,7 @@ export function DashboardMapView() {
                         </Label>
                         <Slider
                           value={filters.latitude}
-                          onValueChange={(value) => updateFilters({ latitude: value as [number, number] })}
+                          onValueChange={(value: [number, number]) => updateFilters({ latitude: value as [number, number] })}
                           min={-90} max={90} step={5}
                           className="w-full"
                         />
@@ -228,7 +228,7 @@ export function DashboardMapView() {
                         </Label>
                         <Slider
                           value={filters.longitude}
-                          onValueChange={(value) => updateFilters({ longitude: value as [number, number] })}
+                          onValueChange={(value: [number, number]) => updateFilters({ longitude: value as [number, number] })}
                           min={-180} max={180} step={10}
                           className="w-full"
                         />
@@ -239,7 +239,7 @@ export function DashboardMapView() {
                         </Label>
                         <Slider
                           value={filters.depthRange}
-                          onValueChange={(value) => updateFilters({ depthRange: value as [number, number] })}
+                          onValueChange={(value: [number, number]) => updateFilters({ depthRange: value as [number, number] })}
                           min={0} max={3000} step={100}
                           className="w-full"
                         />

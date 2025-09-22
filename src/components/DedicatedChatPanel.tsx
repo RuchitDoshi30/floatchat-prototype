@@ -21,16 +21,7 @@ interface Message {
   suggestions?: string[];
 }
 
-
-// Required demo queries for prototype
-const demoQueries = [
-  "Show me salinity profiles near the equator in March 2023",
-  "Compare BGC parameters in the Arabian Sea for the last 6 months",
-  "What are the nearest ARGO floats to this location?"
-];
-
 const suggestedQueries = [
-  ...demoQueries,
   "Show me temperature trends in the North Atlantic",
   "Which BGC floats are active in the Pacific?",
   "Compare salinity profiles from different regions",
@@ -62,8 +53,6 @@ export function DedicatedChatPanel() {
   const [inputValue, setInputValue] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(true);
-  // Track context for demo (depth, temp, salinity, BGC, etc.)
-  const [context, setContext] = useState<string[]>(["Depth", "Temperature", "Salinity", "BGC"]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -76,13 +65,6 @@ export function DedicatedChatPanel() {
   }, [messages]);
 
   const handleSendMessage = async (content: string) => {
-    // Demo: update context chips based on keywords
-    let newContext = [...context];
-    if (/depth/i.test(content) && !newContext.includes("Depth")) newContext.push("Depth");
-    if (/temp/i.test(content) && !newContext.includes("Temperature")) newContext.push("Temperature");
-    if (/salinity/i.test(content) && !newContext.includes("Salinity")) newContext.push("Salinity");
-    if (/bgc|biogeochemical/i.test(content) && !newContext.includes("BGC")) newContext.push("BGC");
-    setContext(Array.from(new Set(newContext)));
     if (!content.trim()) return;
 
     const userMessage: Message = {
@@ -116,7 +98,7 @@ export function DedicatedChatPanel() {
     const lowerQuery = query.toLowerCase();
     
     if (lowerQuery.includes("temperature")) {
-      return "🌡️ Temperature Analysis**: I found 127 active floats with recent temperature measurements. The North Atlantic shows a warming trend of +0.3°C over the past 6 months, while the Southern Ocean maintains stable temperatures around 4-8°C. Float #5906298 shows particularly interesting thermal layering at 500m depth. Would you like me to generate a detailed temperature profile comparison?";
+      return "🌡️ **Temperature Analysis**: I found 127 active floats with recent temperature measurements. The North Atlantic shows a warming trend of +0.3°C over the past 6 months, while the Southern Ocean maintains stable temperatures around 4-8°C. Float #5906298 shows particularly interesting thermal layering at 500m depth. Would you like me to generate a detailed temperature profile comparison?";
     }
     
     if (lowerQuery.includes("bgc") || lowerQuery.includes("biogeochemical")) {
@@ -160,38 +142,15 @@ export function DedicatedChatPanel() {
 
   return (
     <Card className="h-full flex flex-col shadow-2xl border-0 bg-white/40 backdrop-blur-sm rounded-2xl overflow-hidden">
-      {/* Demo Query Buttons */}
-      <div className="flex flex-wrap gap-2 p-3 bg-gradient-to-r from-blue-50/60 to-cyan-50/60 border-b border-slate-100 sm:gap-2 gap-1 sm:p-3 p-2">
-        {demoQueries.map((q, i) => (
-          <Button
-            key={i}
-            variant="outline"
-            size="sm"
-            className="text-xs px-2 py-1 rounded-full hover:bg-blue-100 min-w-[180px] sm:min-w-[220px] w-full sm:w-auto"
-            onClick={() => handleSendMessage(q)}
-          >
-            {q}
-          </Button>
-        ))}
-      </div>
-      {/* Context Bar */}
-      <div className="flex flex-wrap gap-2 px-2 sm:px-4 py-2 bg-white/60 border-b border-slate-100 items-center">
-        <span className="text-xs text-slate-500 font-medium mr-2">Context:</span>
-        {context.map((c, i) => (
-          <Badge key={i} variant="outline" className="text-xs bg-blue-100 text-blue-700 border-blue-200 rounded-full px-2 py-0.5">
-            {c}
-          </Badge>
-        ))}
-      </div>
       {/* Chat Header */}
       <CardHeader className="flex-shrink-0 bg-gradient-to-r from-blue-500/10 to-cyan-500/10 backdrop-blur-sm">
-        <CardTitle className="flex items-center justify-between flex-wrap gap-2">
-          <div className="flex items-center gap-3 min-w-0">
+        <CardTitle className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
             <div className="p-2 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-xl shadow-lg">
               <MessageCircle className="w-5 h-5 text-white" />
             </div>
-            <div className="min-w-0">
-              <div className="text-lg font-semibold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent truncate">
+            <div>
+              <div className="text-lg font-semibold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
                 Floatchat AI
               </div>
               <div className="text-xs text-slate-600 flex items-center gap-1">
@@ -208,7 +167,7 @@ export function DedicatedChatPanel() {
 
       {/* Chat Messages */}
       <CardContent className="flex-1 flex flex-col p-0 overflow-hidden">
-        <ScrollArea className="flex-1 p-2 sm:p-4">
+        <ScrollArea className="flex-1 p-4">
           <div className="space-y-4">
             <AnimatePresence>
               {messages.map((message) => (
@@ -218,25 +177,25 @@ export function DedicatedChatPanel() {
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: -10, scale: 0.95 }}
                   transition={{ duration: 0.3 }}
-                  className={`flex gap-2 sm:gap-3 ${message.type === "user" ? "justify-end" : "justify-start"}`}
+                  className={`flex gap-3 ${message.type === "user" ? "justify-end" : "justify-start"}`}
                 >
                   {message.type === "assistant" && (
-                    <Avatar className="w-7 h-7 sm:w-8 sm:h-8 bg-gradient-to-r from-blue-500 to-cyan-500 flex-shrink-0">
+                    <Avatar className="w-8 h-8 bg-gradient-to-r from-blue-500 to-cyan-500 flex-shrink-0">
                       <AvatarFallback className="text-white">
                         <Bot className="w-4 h-4" />
                       </AvatarFallback>
                     </Avatar>
                   )}
                   
-                  <div className={`max-w-[90vw] sm:max-w-[80%] space-y-2 ${message.type === "user" ? "order-1" : ""}`}>
+                  <div className={`max-w-[80%] space-y-2 ${message.type === "user" ? "order-1" : ""}`}>
                     <div
-                      className={`p-2 sm:p-3 rounded-2xl shadow-sm ${
+                      className={`p-3 rounded-2xl shadow-sm ${
                         message.type === "user"
-                          ? "bg-gradient-to-r from-blue-500 to-cyan-500 text-white ml-2 sm:ml-4"
+                          ? "bg-gradient-to-r from-blue-500 to-cyan-500 text-white ml-4"
                           : "bg-white/80 backdrop-blur-sm text-slate-800"
                       }`}
                     >
-                      <div className="text-sm leading-relaxed whitespace-pre-wrap break-words">
+                      <div className="text-sm leading-relaxed whitespace-pre-wrap">
                         {message.content}
                       </div>
                       <div className={`text-xs mt-2 opacity-70 ${
@@ -251,7 +210,7 @@ export function DedicatedChatPanel() {
                       <motion.div
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: "auto" }}
-                        className="space-y-2 ml-8 sm:ml-11"
+                        className="space-y-2 ml-11"
                       >
                         <div className="text-xs text-slate-600 font-medium">Suggested follow-ups:</div>
                         <div className="space-y-1">
@@ -260,7 +219,7 @@ export function DedicatedChatPanel() {
                               key={index}
                               variant="outline"
                               size="sm"
-                              className="h-auto p-2 text-xs text-left hover:bg-blue-50 hover:border-blue-200 transition-all duration-200 w-full sm:w-auto"
+                              className="h-auto p-2 text-xs text-left hover:bg-blue-50 hover:border-blue-200 transition-all duration-200"
                               onClick={() => handleSuggestionClick(suggestion)}
                             >
                               <ChevronRight className="w-3 h-3 mr-1 flex-shrink-0" />
@@ -273,7 +232,7 @@ export function DedicatedChatPanel() {
                   </div>
                   
                   {message.type === "user" && (
-                    <Avatar className="w-7 h-7 sm:w-8 sm:h-8 bg-gradient-to-r from-slate-400 to-slate-500 flex-shrink-0">
+                    <Avatar className="w-8 h-8 bg-gradient-to-r from-slate-400 to-slate-500 flex-shrink-0">
                       <AvatarFallback className="text-white">
                         <User className="w-4 h-4" />
                       </AvatarFallback>
@@ -290,14 +249,14 @@ export function DedicatedChatPanel() {
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
-                  className="flex gap-2 sm:gap-3"
+                  className="flex gap-3"
                 >
-                  <Avatar className="w-7 h-7 sm:w-8 sm:h-8 bg-gradient-to-r from-blue-500 to-cyan-500">
+                  <Avatar className="w-8 h-8 bg-gradient-to-r from-blue-500 to-cyan-500">
                     <AvatarFallback className="text-white">
                       <Bot className="w-4 h-4" />
                     </AvatarFallback>
                   </Avatar>
-                  <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-3 sm:p-4 shadow-sm">
+                  <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-4 shadow-sm">
                     <div className="flex space-x-1">
                       <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce"></div>
                       <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: "0.1s" }}></div>
@@ -319,7 +278,7 @@ export function DedicatedChatPanel() {
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
-              className="border-t border-slate-200/50 p-2 sm:p-4 bg-gradient-to-r from-blue-50/50 to-cyan-50/50"
+              className="border-t border-slate-200/50 p-4 bg-gradient-to-r from-blue-50/50 to-cyan-50/50"
             >
               <div className="text-xs font-medium text-slate-600 mb-3 flex items-center gap-2">
                 <Sparkles className="w-3 h-3" />
@@ -331,7 +290,7 @@ export function DedicatedChatPanel() {
                     key={index}
                     variant="ghost"
                     size="sm"
-                    className="h-auto p-2 text-xs text-left justify-start hover:bg-white/60 transition-all duration-200 w-full sm:w-auto"
+                    className="h-auto p-2 text-xs text-left justify-start hover:bg-white/60 transition-all duration-200"
                     onClick={() => handleSuggestionClick(query)}
                   >
                     <div className="flex items-center gap-2">
@@ -349,8 +308,8 @@ export function DedicatedChatPanel() {
         </AnimatePresence>
 
         {/* Input Area */}
-        <div className="flex-shrink-0 p-2 sm:p-4 border-t border-slate-200/50 bg-white/30 backdrop-blur-sm">
-          <div className="flex flex-col sm:flex-row gap-2">
+        <div className="flex-shrink-0 p-4 border-t border-slate-200/50 bg-white/30 backdrop-blur-sm">
+          <div className="flex gap-2">
             <div className="flex-1 relative">
               <Input
                 ref={inputRef}
@@ -363,7 +322,7 @@ export function DedicatedChatPanel() {
                   }
                 }}
                 placeholder="Ask about ocean data, float trajectories, or analysis..."
-                className="pr-12 bg-white/80 backdrop-blur-sm border-slate-200/50 focus:border-blue-300 focus:ring-blue-200/50 rounded-xl text-sm sm:text-base"
+                className="pr-12 bg-white/80 backdrop-blur-sm border-slate-200/50 focus:border-blue-300 focus:ring-blue-200/50 rounded-xl"
                 disabled={isTyping}
               />
               <div className="absolute right-3 top-1/2 transform -translate-y-1/2 flex items-center gap-1">
@@ -373,13 +332,13 @@ export function DedicatedChatPanel() {
             <Button
               onClick={() => handleSendMessage(inputValue)}
               disabled={!inputValue.trim() || isTyping}
-              className="bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white shadow-lg rounded-xl w-full sm:w-auto"
+              className="bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white shadow-lg rounded-xl"
             >
               <Send className="w-4 h-4" />
             </Button>
           </div>
           
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mt-2 text-xs text-slate-500 gap-1 sm:gap-0">
+          <div className="flex items-center justify-between mt-2 text-xs text-slate-500">
             <div className="flex items-center gap-2">
               <Waves className="w-3 h-3" />
               <span>Connected to ARGO Global Network</span>

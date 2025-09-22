@@ -106,7 +106,7 @@ export default function App() {
 
   return (
     <FilterProvider>
-      <div className="h-screen bg-gradient-to-br from-blue-50 via-cyan-50 to-purple-50 flex flex-col overflow-hidden">
+  <div className="h-screen bg-gradient-to-br from-blue-50 via-cyan-50 to-purple-50 flex flex-col overflow-auto">
         {/* Navigation Header - Only show on main page */}
         {currentPage === "main" && (
           <div className="flex-shrink-0">
@@ -171,7 +171,7 @@ export default function App() {
         )}
 
         {/* Main Content Area */}
-        <div className="flex-1 overflow-hidden">
+  <div className="flex-1 overflow-auto">
           <AnimatePresence mode="wait">
             <motion.div
               key={currentPage}
