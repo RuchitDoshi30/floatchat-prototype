@@ -43,7 +43,21 @@ const contextualSuggestions = [
   "Show biogeochemical parameters"
 ];
 
-const quickActions = [
+type QuickActionLabel =
+  | "Trend Analysis"
+  | "Geographic Search"
+  | "Statistical Summary"
+  | "Data Export"
+  | "Quality Control"
+  | "Global Overview";
+
+interface QuickAction {
+  icon: React.ElementType;
+  label: QuickActionLabel;
+  color: string;
+}
+
+const quickActions: QuickAction[] = [
   { icon: TrendingUp, label: "Trend Analysis", color: "blue" },
   { icon: MapPin, label: "Geographic Search", color: "green" },
   { icon: BarChart3, label: "Statistical Summary", color: "purple" },
@@ -166,8 +180,22 @@ export function ChatbotPage({ onBack }: ChatbotPageProps) {
     handleSendMessage(suggestion);
   };
 
-  const handleQuickAction = (action: any) => {
-    const actionQueries = {
+  type QuickActionLabel =
+    | "Trend Analysis"
+    | "Geographic Search"
+    | "Statistical Summary"
+    | "Data Export"
+    | "Quality Control"
+    | "Global Overview";
+
+  interface QuickAction {
+    icon: React.ElementType;
+    label: QuickActionLabel;
+    color: string;
+  }
+
+  const handleQuickAction = (action: QuickAction) => {
+    const actionQueries: Record<QuickActionLabel, string> = {
       "Trend Analysis": "Show me the latest temperature trends across all ocean basins",
       "Geographic Search": "Find all active floats in the North Atlantic region",
       "Statistical Summary": "Generate a statistical summary of recent oceanographic measurements",
@@ -180,7 +208,7 @@ export function ChatbotPage({ onBack }: ChatbotPageProps) {
   };
 
   return (
-    <div className="h-screen bg-gradient-to-br from-blue-50 via-cyan-50 to-purple-50 flex flex-col overflow-hidden">
+  <div className="h-screen bg-gradient-to-br from-blue-50 via-cyan-50 to-purple-50 flex flex-col overflow-auto">
       {/* Header */}
       <div className="flex-shrink-0 bg-white/40 backdrop-blur-sm border-b border-white/20 p-4">
         <div className="flex items-center justify-between">
@@ -221,7 +249,7 @@ export function ChatbotPage({ onBack }: ChatbotPageProps) {
       </div>
 
       {/* Main Chat Interface */}
-      <div className="flex-1 flex overflow-hidden p-4 gap-4">
+  <div className="flex-1 flex overflow-auto p-4 gap-4">
         {/* Quick Actions Sidebar */}
         <div className="w-64 flex-shrink-0">
           <Card className="h-full shadow-xl border-0 bg-white/40 backdrop-blur-sm">
@@ -260,7 +288,7 @@ export function ChatbotPage({ onBack }: ChatbotPageProps) {
         {/* Chat Area */}
         <Card className="flex-1 flex flex-col shadow-2xl border-0 bg-white/40 backdrop-blur-sm rounded-2xl overflow-hidden">
           {/* Chat Messages */}
-          <CardContent className="flex-1 flex flex-col p-0 overflow-hidden">
+    <CardContent className="flex-1 flex flex-col p-0 overflow-auto">
             <ScrollArea className="flex-1 p-6">
               <div className="space-y-6">
                 <AnimatePresence>
